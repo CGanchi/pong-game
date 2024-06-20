@@ -1,0 +1,261 @@
+import SpriteKit
+import GameplayKit
+class GameScene: SKScene {
+    var prevBallY = 0.0
+    var ball = SKSpriteNode()
+    var enemy = SKSpriteNode()
+    var main = SKSpriteNode()
+    var cscore = SKLabelNode()
+    var mescore = SKLabelNode()
+    var bouncer1 = SKSpriteNode()
+    var bouncer2 = SKSpriteNode()
+    var bouncer3 = SKSpriteNode()
+    var startButt = SKSpriteNode()
+    var easyMode = SKSpriteNode()
+    var mediumMode = SKSpriteNode()
+    var hardMode = SKSpriteNode()
+    var cscoreNum = 0
+    var mescoreNum = 0
+    var a = 2
+    var first = 1
+    var enemySpeed = 0
+    var mode = ""
+    var bounceX = 0
+    var bounceY = 0 
+    var bounceX2 = 0
+    var bounceY2 = 0
+    var bounceX3 = 0
+    var bounceY3 = 0
+    
+    override func didMove(to view: SKView) {
+        bouncer1 = self.childNode(withName: "bouncer") as! SKSpriteNode
+        bouncer2 = self.childNode(withName: "bouncer2") as! SKSpriteNode
+        bouncer3 = self.childNode(withName: "bouncer3") as! SKSpriteNode
+        startButt = SKSpriteNode(imageNamed: "start")
+        easyMode = SKSpriteNode(imageNamed: "EasyButton")
+        mediumMode = SKSpriteNode(imageNamed: "MediumButton")
+        hardMode = SKSpriteNode(imageNamed: "HardButton")
+        self.addChild(startButt)
+        ball = self.childNode(withName: "ball") as! SKSpriteNode
+        enemy = self.childNode(withName: "enemy") as! SKSpriteNode
+        main = self.childNode(withName: "main") as! SKSpriteNode
+        cscore = self.childNode(withName: "cscore") as! SKLabelNode
+        mescore = self.childNode(withName: "help") as! SKLabelNode
+        prevBallY = ball.position.y
+        ball.removeFromParent()
+        enemy.removeFromParent()
+        main.removeFromParent()
+        cscore.removeFromParent()
+        mescore.removeFromParent()
+        bouncer1.removeFromParent()
+        bouncer2.removeFromParent()
+        bouncer3.removeFromParent()
+     
+        
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches {
+                  let location = touch.location(in: self)
+                if (startButt.contains(location) && a%2 == 0) {
+                    startButt.position = CGPoint(x: 1000, y: -1000)
+                    startButt.removeFromParent()
+                    self.addChild(easyMode)
+                    easyMode.position = CGPoint(x: 0.0, y: 250)
+                    self.addChild(mediumMode)
+                    mediumMode.position = CGPoint(x: 0.0, y: 500)
+                    self.addChild(hardMode)
+                    hardMode.position = CGPoint(x: 0.0, y: -250)
+                }
+                if (easyMode.contains(location)){
+                    mode = "easy"
+                    easyMode.position = CGPoint(x: -1000, y: -250)
+                    easyMode.removeFromParent()
+                    mediumMode.position = CGPoint(x: -1000, y: -250)
+                    mediumMode.removeFromParent()
+                    hardMode.position = CGPoint(x: -1000, y: -250)
+                    hardMode.removeFromParent()
+                    if(first == 1){
+                                self.addChild(cscore)
+                                self.addChild(mescore)
+                                first += 1
+                    }
+                    cscoreNum = 0
+                    mescoreNum = 0
+                    a += 1
+                    cscore.run(SKAction.moveTo(y: -640, duration: 0))
+                    mescore.run(SKAction.moveTo(y: -640, duration: 0))
+                    self.addChild(ball)
+                    self.addChild(main)
+                    self.addChild(enemy)
+                    ball.physicsBody?.velocity = CGVector(dx: 600.0, dy: 600.0)
+                    
+                  }
+            if (mediumMode.contains(location)){
+                mode = "medium"
+                easyMode.position = CGPoint(x: -1000, y: -250)
+                easyMode.removeFromParent()
+                mediumMode.position = CGPoint(x: -1000, y: -250)
+                mediumMode.removeFromParent()
+                hardMode.position = CGPoint(x: -1000, y: -250)
+                if(first == 1){
+                            self.addChild(cscore)
+                            self.addChild(mescore)
+                            first += 1
+                }
+                cscoreNum = 0
+                mescoreNum = 0
+                a += 1
+                cscore.run(SKAction.moveTo(y: -640, duration: 0))
+                mescore.run(SKAction.moveTo(y: -640, duration: 0))
+                self.addChild(ball)
+                self.addChild(main)
+                self.addChild(enemy)
+                // ball.run(SKAction.sequence(<#T##actions: [SKAction]##[SKAction]#>))
+                ball.physicsBody?.velocity = CGVector(dx: 800.0, dy: 800.0)
+                
+              }
+            if (hardMode.contains(location)){
+                mode = "hard"
+                easyMode.position = CGPoint(x: -1000, y: -250)
+                easyMode.removeFromParent()
+                mediumMode.position = CGPoint(x: -1000, y: -250)
+                mediumMode.removeFromParent()
+                hardMode.position = CGPoint(x: -1000, y: -250)
+                hardMode.removeFromParent()
+                if(first == 1){
+                            self.addChild(cscore)
+                            self.addChild(mescore)
+                            first += 1
+                }
+                cscoreNum = 0
+                mescoreNum = 0
+                a += 1
+                cscore.run(SKAction.moveTo(y: -640, duration: 0))
+                mescore.run(SKAction.moveTo(y: -640, duration: 0))
+                self.addChild(ball)
+                self.addChild(main)
+                self.addChild(enemy)
+                ball.physicsBody?.velocity = CGVector(dx: 1000.0, dy: 1000.0)
+                
+              }
+                main.run(SKAction.moveTo(x: location.x, duration: 0.1))
+             }
+        
+    }
+    
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches {
+            let location = touch.location(in: self)
+            
+            main.run(SKAction.moveTo(x: location.x, duration: 0.1))
+            
+        }
+    }
+    
+    override func update(_ currentTime: TimeInterval) {
+        if(mode == "easy"){
+            enemy.run(SKAction.moveTo(x: ball.position.x, duration: 0.35))
+        }else if(mode == "medium"){
+            enemy.run(SKAction.moveTo(x: ball.position.x, duration: 0.15))
+        }else{
+            enemy.run(SKAction.moveTo(x: ball.position.x, duration: 0.09))
+        }
+    
+        // Check if ball has passed the y-coordinate thresholds
+        if ((prevBallY <= 505 && ball.position.y > 505) || (prevBallY >= -505 && ball.position.y < -505)) {
+            if(mode == "easy"){
+                bounceY = Int.random(in: -450..<451)
+                bounceX = Int.random(in: -253..<254)
+                bouncer1.position = CGPoint(x: bounceX, y: bounceY)
+                if (bouncer1.parent == nil) {
+                        self.addChild(bouncer1)
+                }
+            }else if(mode == "medium"){
+                bounceY = Int.random(in: -450..<451)
+                bounceX = Int.random(in: -253..<254)
+                bouncer1.position = CGPoint(x: bounceX, y: bounceY)
+                if (bouncer1.parent == nil) {
+                        self.addChild(bouncer1)
+                }
+                bounceY2 = Int.random(in: -450..<451)
+                bounceX2 = Int.random(in: -253..<254)
+                bouncer2.position = CGPoint(x: bounceX2, y: bounceY2)
+                if (bouncer2.parent == nil) {
+                        self.addChild(bouncer2)
+                }
+            }else{
+                bounceY = Int.random(in: -450..<451)
+                bounceX = Int.random(in: -253..<254)
+                bouncer1.position = CGPoint(x: bounceX, y: bounceY)
+                if (bouncer1.parent == nil) {
+                        self.addChild(bouncer1)
+                }
+                bounceY2 = Int.random(in: -450..<451)
+                bounceX2 = Int.random(in: -253..<254)
+                bouncer2.position = CGPoint(x: bounceX2, y: bounceY2)
+                if (bouncer2.parent == nil) {
+                        self.addChild(bouncer2)
+                }
+                bounceY3 = Int.random(in: -450..<451)
+                bounceX3 = Int.random(in: -253..<254)
+                bouncer3.position = CGPoint(x: bounceX3, y: bounceY3)
+                if (bouncer3.parent == nil) {
+                        self.addChild(bouncer3)
+                }
+            }
+            
+        }
+        if(ball.position.y < -666){
+            cscoreNum += 1
+            ball.position = CGPoint(x: 0, y: 0)
+            if(mode == "easy"){
+                ball.physicsBody?.velocity = CGVector(dx: -600.0, dy: -600.0)
+            }else if(mode == "medium"){
+                ball.physicsBody?.velocity = CGVector(dx: -800.0, dy: -800.0)
+            }else{
+                ball.physicsBody?.velocity = CGVector(dx: -1000.0, dy: -1000.0)
+            }
+            
+        }
+        if(ball.position.y > 666){
+            mescoreNum += 1
+            ball.position = CGPoint(x: 0, y: 0)
+            if(mode == "easy"){
+                ball.physicsBody?.velocity = CGVector(dx: 600.0, dy: 600.0)
+            }else if(mode == "medium"){
+                ball.physicsBody?.velocity = CGVector(dx: 800.0, dy: 800.0)
+            }else{
+                ball.physicsBody?.velocity = CGVector(dx: 1000.0, dy: 1000.0)
+            }
+        }
+        if((cscoreNum == 7 || mescoreNum == 7) && a % 2 == 1){
+            ball.removeFromParent()
+            enemy.removeFromParent()
+            main.removeFromParent()
+            bouncer1.removeFromParent()
+            bouncer2.removeFromParent()
+            bouncer3.removeFromParent()
+            a += 1
+            mode = ""
+            if(startButt.parent == nil){
+                addChild(startButt)
+                startButt.position = CGPoint(x: 0, y: 0)
+               
+            }
+            mescore.run(SKAction.sequence([SKAction.moveTo(y: -450, duration: 2.4)]))
+            cscore.run(SKAction.sequence([SKAction.moveTo(y: -450, duration: 2.4)]))
+        }
+        
+        mescore.text = String(mescoreNum)
+        cscore.text = String(cscoreNum)
+    
+        // Update prevBallY to the current y-position of the ball for the next frame
+        prevBallY = ball.position.y
+    }
+    func startGame(){
+        
+    }
+    
+    
+}
